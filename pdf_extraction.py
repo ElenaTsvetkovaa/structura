@@ -3,7 +3,7 @@ import pandas as pd
 from typing import List
 
 
-class PDFReader:
+class PdfExtractor:
 
     @staticmethod
     def extract_tables_from_pdf(pdf_path: str) -> List[pd.DataFrame]:
@@ -25,18 +25,12 @@ class PDFReader:
         except Exception as e:
             raise Exception(f"Failed to process PDF: {str(e)}")
 
-class PdfExtractor:
 
     @staticmethod
-    def save_tables_to_excel(tables: List[pd.DataFrame], output_path: str, in_single_sheet=True) -> None:
+    def create_dataframe(tables: List[pd.DataFrame]) -> pd.DataFrame:
 
-        if in_single_sheet and len(tables) > 1:
-            combined = pd.concat(tables)
-            combined.to_excel(output_path, index=False)
-        else:
-            with pd.ExcelWriter(output_path) as writer:
-                for i, table in enumerate(tables):
-                    table.to_excel(writer, sheet_name=f"Table_{i+1}", index=False)
+        combined = pd.concat(tables, ignore_index=True)
+        return combined
 
 
 

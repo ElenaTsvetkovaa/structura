@@ -11,10 +11,6 @@ class PdfTableExtractor:
         self.importer = importer
         self.progress_reporter = progress_reporter
 
-    def _update_progress(self, value: int, message: str):
-        if self.progress_reporter:
-            self.progress_reporter.update_progress(value, message)
-
     def run(self):
         try:
 
@@ -22,18 +18,14 @@ class PdfTableExtractor:
             file_path = self.importer.import_files()
 
             tables = self.pdf_reader.extract_tables_from_pdf(file_path)
-            self._update_progress(60, f"Extracted {len(tables)} tables")
 
-            # Export tables
             output_path = "output.xlsx"  # Would come from user in actual impl
-            self.extractor.save_tables_to_excel(tables, output_path)
-            self._update_progress(100, "Export complete")
+            self.extractor.create_dataframe(tables)
 
             return output_path
 
         except Exception as e:
-            self._update_progress(0, f"Error: {str(e)}")
-            raise
+            raise e
 
 
 if __name__ == "__main__":
