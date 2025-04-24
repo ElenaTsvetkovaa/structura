@@ -1,41 +1,29 @@
+from dataclasses import dataclass, field
+from typing import List
 
-
+@dataclass(frozen=True)
 class TemplateColumns:
-
-    PROJECT = 'Project'
-    WORKSTREAM = 'Workstream'
-    ORGANISATIONAL_UNIT = "Organisational Unit"
-    COST_TYPE = "Cost Type"
-    EXTERNAL_ID = "External ID"
-    DATE = "Date"
-    DISPLAY_NAME = "Display Name"
-    FIRST_NAME = "First Name"
-    LAST_NAME  = "Last Name"
-    SENIORITY = "Seniority"
-    DESCRIPTION = "Description"
-    VOLUME = "Volume"
-    HOURLY_RATE = "Hourly Rate"
-    QUANTITY = "Quantity"
-    IS_HOURS = "Is Hours"
-    EXPENSE_TOTAL_COST = "Expense Total Cost"
-    CURRENCY = "Currency"
+    PROJECT: str = "Project"
+    WORKSTREAM: str = "Workstream"
+    ORGANISATIONAL_UNIT: str = "Organisational Unit"
+    COST_TYPE: str = "Cost Type"
+    EXTERNAL_ID: str = "External ID"
+    DATE: str = "Date"
+    DISPLAY_NAME: str = "Display Name"
+    FIRST_NAME: str = "First Name"
+    LAST_NAME: str = "Last Name"
+    SENIORITY: str = "Seniority"
+    DESCRIPTION: str = "Description"
+    VOLUME: str = "Volume"
+    HOURLY_RATE: str = "Hourly Rate"
+    QUANTITY: str = "Quantity"
+    IS_HOURS: str = "Is Hours"
+    EXPENSE_TOTAL_COST: str = "Expense Total Cost"
+    CURRENCY: str = "Currency"
 
     @classmethod
-    def get_all_columns(cls) -> list:
-        return [cls.PROJECT, cls.WORKSTREAM, cls.ORGANISATIONAL_UNIT,
-                cls.COST_TYPE, cls.EXTERNAL_ID, cls.DATE,
-                cls.DISPLAY_NAME, cls.FIRST_NAME, cls.LAST_NAME,
-                cls.SENIORITY, cls.DESCRIPTION, cls.VOLUME,
-                cls.HOURLY_RATE, cls.QUANTITY, cls.IS_HOURS,
-                cls.EXPENSE_TOTAL_COST, cls.CURRENCY]
-
-
-
-
-
-
-
-
+    def get_all_columns(cls) -> List[str]:
+        return [getattr(cls(), field.name) for field in cls.__dataclass_fields__.values()]
 
 
 
