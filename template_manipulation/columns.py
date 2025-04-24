@@ -1,8 +1,9 @@
 from dataclasses import dataclass, field
 from typing import List
 
-@dataclass(frozen=True)
+@dataclass
 class TemplateColumns:
+
     PROJECT: str = "Project"
     WORKSTREAM: str = "Workstream"
     ORGANISATIONAL_UNIT: str = "Organisational Unit"
