@@ -8,7 +8,13 @@ class PDFReader:
     @staticmethod
     def extract_tables_from_pdf(pdf_path: str) -> List[pd.DataFrame]:
         try:
-            tables = camelot.read_pdf(pdf_path, pages='all', flavor='lattice')
+            tables = camelot.read_pdf(
+                pdf_path,
+                pages='all',
+                flavor='lattice',
+                strip_text='\n',
+                split_text=True
+            )
             print(f"Number of tables detected: {len(tables)}")
 
             # Print information about each table (page, position, etc.)
