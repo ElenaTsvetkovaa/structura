@@ -13,7 +13,8 @@ class TransactionsTemplateCreator(TemplateColumns):
         self.dataframe: pd.DataFrame | None = None
 
     def create_template(self):
-        self.dataframe = pd.DataFrame(self.template_content, columns=self.get_all_columns())
+        self.dataframe = pd.concat(self.template_content, ignore_index=True)
+        self.dataframe = self.dataframe.reindex(columns=TemplateColumns.get_all_columns())
         return self.dataframe
 
 
@@ -44,7 +45,8 @@ class TransactionsTemplateCreator(TemplateColumns):
 
                 self.template_content.append(table)
 
-
+        if self.template_content:
+            self.create_template()
 
 
 

@@ -23,9 +23,10 @@ class TemplateColumns:
 
     @classmethod
     def get_all_columns(cls) -> List[str]:
-        return [v for v in cls.__dict__.values() if isinstance(v, str)][1:]
-
-
+        return [
+            value for key, value in cls.__dict__.items()
+            if not key.startswith("__") and isinstance(value, str)
+        ]
 
 
 
