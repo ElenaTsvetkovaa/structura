@@ -12,11 +12,6 @@ class TransactionsTemplateCreator(TemplateColumns):
         self.template_content = []
         self.dataframe: pd.DataFrame | None = None
 
-    def create_template(self):
-        self.dataframe = pd.concat(self.template_content, ignore_index=True)
-        self.dataframe = self.dataframe.reindex(columns=TemplateColumns.get_all_columns())
-        return self.dataframe
-
 
     def header_mapping_dict(self):
         return {
@@ -49,7 +44,10 @@ class TransactionsTemplateCreator(TemplateColumns):
             self.create_template()
 
 
-
+    def create_template(self):
+        self.dataframe = pd.concat(self.template_content, ignore_index=True)
+        self.dataframe = self.dataframe.reindex(columns=TemplateColumns.get_all_columns())
+        return self.dataframe
 
 
 
