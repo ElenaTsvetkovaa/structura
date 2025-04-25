@@ -26,24 +26,3 @@ class PdfExtractor:
             raise Exception(f"Failed to process PDF: {str(e)}")
 
 
-    @staticmethod
-    def create_dataframe(tables: List[pd.DataFrame]) -> pd.DataFrame:
-
-        combined = pd.concat(tables, ignore_index=True)
-        return combined
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

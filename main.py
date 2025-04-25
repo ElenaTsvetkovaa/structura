@@ -1,15 +1,15 @@
 from file_importer import PdfFileImporter
-from pdf_extraction import PDFReader, PdfExtractor
+from pdf_extraction import PdfExtractor
+from template_manipulation.template_creator import TransactionsTemplateCreator
 
 
 class PdfTableExtractor:
 
-    def __init__(self, extractor: PdfExtractor, pdf_reader: PDFReader, importer: PdfFileImporter, progress_reporter):
+    def __init__(self, extractor: PdfExtractor, importer: PdfFileImporter):
 
         self.extractor = extractor
-        self.pdf_reader = pdf_reader
         self.importer = importer
-        self.progress_reporter = progress_reporter
+
 
     def run(self):
         try:
@@ -17,10 +17,11 @@ class PdfTableExtractor:
             # file_path = r"C:\Users\oWorkers\Downloads\300247 11.10.2024.pdf"
             file_path = self.importer.import_files()
 
-            tables = self.pdf_reader.extract_tables_from_pdf(file_path)
+            tables = self.extractor.extract_tables_from_pdf(file_path)
 
-            output_path = "output.xlsx"  # Would come from user in actual impl
-            self.extractor.create_dataframe(tables)
+            template_creator = TransactionsTemplateCreator(file_path.split('\\')[-1], tables)
+            output_path = "output.xlsx"
+            template_creator.extract_data_from_table()
 
             return output_path
 
@@ -31,10 +32,8 @@ class PdfTableExtractor:
 if __name__ == "__main__":
     extractor = PdfExtractor()
     importer = PdfFileImporter()
-    progress_reporter = None
-    reader = PDFReader()
 
-    app = PdfTableExtractor(extractor, reader, importer, progress_reporter)
+    app = PdfTableExtractor(extractor, importer)
     app.run()
 
 

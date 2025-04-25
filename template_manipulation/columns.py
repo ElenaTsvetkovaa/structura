@@ -1,7 +1,6 @@
-from dataclasses import dataclass, field
 from typing import List
 
-@dataclass
+
 class TemplateColumns:
 
     PROJECT: str = "Project"
@@ -24,9 +23,7 @@ class TemplateColumns:
 
     @classmethod
     def get_all_columns(cls) -> List[str]:
-        return [getattr(cls(), field.name) for field in cls.__dataclass_fields__.values()]
-
-
+        return [v for v in cls.__dict__.values() if isinstance(v, str)][1:]
 
 
 
