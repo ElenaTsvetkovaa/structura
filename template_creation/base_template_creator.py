@@ -32,7 +32,7 @@ class BaseTemplateCreator(ABC):
 class TemplateDataHandler(ABC):
 
     @abstractmethod
-    def default_values_dict(self):
+    def default_values_dict(self) -> dict:
         ...
 
     def populate_df_with_default_values(self, empty_columns,df, skipped_lines_df):
