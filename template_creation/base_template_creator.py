@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
 import pandas as pd
-from template_creation.defaults import TransactionTemplateColumns, ColumnsGetter
 
 
 class BaseTemplateCreator(ABC):
