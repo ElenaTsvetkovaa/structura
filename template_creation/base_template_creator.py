@@ -6,8 +6,9 @@ from template_creation.defaults import TransactionTemplateColumns, ColumnsGetter
 
 class BaseTemplateCreator(ABC):
 
-    def __init__(self, tables_dfs: List[pd.DataFrame], template_name: str, template_data_handler):
+    def __init__(self, tables_dfs: List[pd.DataFrame],template_columns, template_name: str, template_data_handler):
         self.tables_dfs = tables_dfs
+        self.template_columns = template_columns
         self.template_name = template_name
         self.template_data_handler = template_data_handler
         self.template_content = []
@@ -15,7 +16,6 @@ class BaseTemplateCreator(ABC):
         self.dataframe: pd.DataFrame | None = None
 
     def create_template(self):
-        self.template_content = self.extract_data_from_table()
         self.dataframe = pd.concat(self.template_content , ignore_index=True)
         self.dataframe = self.dataframe.reindex(columns=self.get_all_columns())
 

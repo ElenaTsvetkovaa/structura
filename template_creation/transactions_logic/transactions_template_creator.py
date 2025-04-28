@@ -31,12 +31,13 @@ class TransactionsTemplateCreator(BaseTemplateCreator, TransactionTemplateColumn
 
                 self.template_content.append(table)
 
-        return self.template_content
+        if self.template_content:
+            self.create_template()
 
 
 class TransactionsDataHandler(TemplateDataHandler, TransactionTemplateColumns, DefaultValues):
 
-    def populate_df_with_default_values(self, empty_columns, df):
+    def populate_df_with_default_values(self, empty_columns, df, skipped_lines_df):
         mapper = {
             self.COST_TYPE: self.default_cost_type,
             self.IS_HOURS: self.default_is_hours,

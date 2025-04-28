@@ -4,6 +4,8 @@ from pdf_extraction import PdfExtractor
 from template_creation.line_template_creation import LineItemsDataHandler, LineItemsTemplateCreator
 from template_creation.transactions_template_creator import TransactionsTemplateCreator,TransactionsDataHandler
 
+from template_creation.defaults import TemplateLineItemColumns, TransactionTemplateColumns
+
 
 class PdfTableExtractor:
 
@@ -33,14 +35,14 @@ class PdfTableExtractor:
             os.makedirs(output_folder, exist_ok=True)
 
             # Transactions
-            transactions_creator = self.transactions_creator(tables, file_name, self.transactions_data_handler)
-            trans_df = transactions_creator.create_template()
+            transactions_creator = self.transactions_creator(tables, TransactionTemplateColumns, file_name, self.transactions_data_handler)
+
             output_file = os.path.join(output_folder, f"{file_stem}_transactions.xlsx")
             trans_df.to_excel(output_file, index=False)
 
             # Line Items
-            line_creator = self.line_items_creator(tables, file_name, self.line_items_data_handler)
-            line_df = line_creator.create_template()
+            line_creator = self.line_items_creator(tables, TemplateLineItemColumns, file_name, self.line_items_data_handler)
+
             output_file = os.path.join(output_folder, f"{file_stem}_line_items.xlsx")
             line_df.to_excel(output_file, index=False)
 
