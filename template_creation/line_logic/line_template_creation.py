@@ -30,12 +30,14 @@ class LineItemsTemplateCreator(BaseTemplateCreator, TemplateLineItemColumns):
 
 class LineItemsDataHandler(TemplateDataHandler, TemplateLineItemColumns, DefaultValues):
 
-    def populate_df_with_default_values(self, empty_columns, df, skipped_lines_df):
-        mapper = {
+    def default_values_dict(self):
+        return {
             self.COST_TYPE: self.default_cost_type,
             self.IS_HOURS: self.default_is_hours,
             self.DESCRIPTION: self.default_line_description
         }
+
+    def populate_df_with_default_values(self, empty_columns, df, skipped_lines_df):
 
         try:
             for c in empty_columns:

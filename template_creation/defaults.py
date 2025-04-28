@@ -94,3 +94,11 @@ class DefaultValues:
     def default_line_description(self):
         return 'Honorar'
 
+    @property
+    def default_pricing_type(self):
+        return 'Time and Material'
+
+    @property
+    def default_invoice_type(self):
+        return 'Debit'
+

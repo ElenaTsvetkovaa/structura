@@ -44,19 +44,12 @@ class TransactionsTemplateCreator(BaseTemplateCreator, TransactionTemplateColumn
 
 class TransactionsDataHandler(TemplateDataHandler, TransactionTemplateColumns, DefaultValues):
 
-    def populate_df_with_default_values(self, empty_columns, df, skipped_lines_df):
-        mapper = {
+    def default_values_dict(self):
+        return {
             self.COST_TYPE: self.default_cost_type,
             self.IS_HOURS: self.default_is_hours,
             self.CURRENCY: self.default_currency
         }
-
-        try:
-            for c in empty_columns:
-                if c in mapper.keys():
-                    df[c] = mapper[c]
-        except (KeyError, TypeError) as e:
-            print(str(e))
 
 
 
