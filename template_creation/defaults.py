@@ -29,6 +29,18 @@ class TemplateColumns:
         ]
 
 
+class DefaultValues:
 
+    @property
+    def default_cost_type(self):
+        return 'Fees'
+
+    @property
+    def default_is_hours(self):
+        return 'True'
+
+    @property
+    def default_currency(self):
+        return 'EUR'
 
 

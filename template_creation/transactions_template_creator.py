@@ -1,17 +1,8 @@
-from typing import List
-import pandas as pd
-from template_manipulation.columns import TemplateColumns
+from template_creation.base_template_creator import BaseTemplateCreator, TemplateDataHandler
+from template_creation.defaults import TemplateColumns, DefaultValues
 
 
-
-class TransactionsTemplateCreator(TemplateColumns):
-
-    def __init__(self, template_name: str, tables_dfs: List[pd.DataFrame]):
-        self.template_name = template_name
-        self.tables_dfs = tables_dfs
-        self.template_content = []
-        self.dataframe: pd.DataFrame | None = None
-
+class TransactionsTemplateCreator(BaseTemplateCreator, TemplateColumns):
 
     def header_mapping_dict(self):
         return {
@@ -40,20 +31,24 @@ class TransactionsTemplateCreator(TemplateColumns):
 
                 self.template_content.append(table)
 
-        if self.template_content:
-            self.create_template()
+        return self.template_content
 
 
-    def create_template(self):
-        self.dataframe = pd.concat(self.template_content, ignore_index=True)
-        self.dataframe = self.dataframe.reindex(columns=TemplateColumns.get_all_columns())
-        return self.dataframe
+class TransactionsDataHandler(TemplateDataHandler, TemplateColumns, DefaultValues):
 
+    def populate_df_with_default_values(self, empty_columns, df):
+        mapper = {
+            self.COST_TYPE: self.default_cost_type,
+            self.IS_HOURS: self.default_is_hours,
+            self.CURRENCY: self.default_currency
+        }
 
-
-
-
-
+        try:
+            for c in empty_columns:
+                if c in mapper.keys():
+                    df[c] = mapper[c]
+        except (KeyError, TypeError) as e:
+            print(str(e))
 
 
 

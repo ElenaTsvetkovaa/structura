@@ -1,17 +1,19 @@
 import os
-
 from file_importer import PdfFileImporter
 from pdf_extraction import PdfExtractor
-from template_manipulation.template_creator import TransactionsTemplateCreator
+from template_creation.transactions_template_creator import TransactionsTemplateCreator,TransactionsDataHandler
 
 
 class PdfTableExtractor:
 
-    def __init__(self, extractor: PdfExtractor, importer: PdfFileImporter, template_creator_cls):
+    def __init__(self, extractor: PdfExtractor, importer: PdfFileImporter, transactions_data_handler, transactions_creator):
 
         self.extractor = extractor
         self.importer = importer
-        self.template_creator_cls = template_creator_cls
+
+        # Transactions classes
+        self.transactions_data_handler = transactions_data_handler
+        self.transactions_creator = transactions_creator
 
     def run(self):
         try:
@@ -22,8 +24,7 @@ class PdfTableExtractor:
             file_stem = os.path.splitext(file_name)[0]
             folder_path = os.path.dirname(file_path)
 
-            template_creator = self.template_creator_cls(file_name, tables)
-            template_creator.extract_data_from_table()
+            template_creator = self.transactions_creator(tables, file_name, self.transactions_data_handler)
             df = template_creator.create_template()
 
             output_file = os.path.join(folder_path, f"{file_stem}_extracted.xlsx")
@@ -38,8 +39,9 @@ class PdfTableExtractor:
 if __name__ == "__main__":
     extractor = PdfExtractor()
     importer = PdfFileImporter()
+    transactions_data_handler = TransactionsDataHandler()
 
-    app = PdfTableExtractor(extractor, importer, TransactionsTemplateCreator)
+    app = PdfTableExtractor(extractor, importer, transactions_data_handler, TransactionsTemplateCreator)
     app.run()
 
 
