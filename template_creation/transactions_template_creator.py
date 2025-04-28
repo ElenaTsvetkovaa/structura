@@ -1,8 +1,8 @@
 from template_creation.base_template_creator import BaseTemplateCreator, TemplateDataHandler
-from template_creation.defaults import TemplateColumns, DefaultValues
+from template_creation.defaults import TransactionTemplateColumns, DefaultValues
 
 
-class TransactionsTemplateCreator(BaseTemplateCreator, TemplateColumns):
+class TransactionsTemplateCreator(BaseTemplateCreator, TransactionTemplateColumns):
 
     def header_mapping_dict(self):
         return {
@@ -34,7 +34,7 @@ class TransactionsTemplateCreator(BaseTemplateCreator, TemplateColumns):
         return self.template_content
 
 
-class TransactionsDataHandler(TemplateDataHandler, TemplateColumns, DefaultValues):
+class TransactionsDataHandler(TemplateDataHandler, TransactionTemplateColumns, DefaultValues):
 
     def populate_df_with_default_values(self, empty_columns, df):
         mapper = {
