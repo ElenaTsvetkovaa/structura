@@ -10,17 +10,17 @@ class BaseTemplateCreator(ABC):
         self.template_columns = template_columns
         self.template_name = template_name
         self.template_data_handler = template_data_handler
-        self.template_content = []
         self.skipped_content_df: pd.DataFrame | None = None
         self.dataframe: pd.DataFrame | None = None
 
     def create_template(self):
-        self.dataframe = pd.concat(self.template_content , ignore_index=True)
-        self.dataframe = self.dataframe.reindex(columns=self.get_all_columns())
+        content = self.extract_data_from_table()
+        self.dataframe = pd.concat(content , ignore_index=True)
+        self.dataframe = self.dataframe.reindex(columns=self.template_columns.get_all_columns())
 
         empty_columns = [c for c in self.dataframe.columns if self.dataframe[c].isna().all()]
         if empty_columns:
-            self.template_data_handler.populate_df_with_default_values(empty_columns, self.dataframe)
+            self.template_data_handler.populate_df_with_default_values(empty_columns, self.dataframe, self.skipped_content_df)
 
         return self.dataframe
 

@@ -1,3 +1,4 @@
+
 from template_creation.base_template_creator import BaseTemplateCreator, TemplateDataHandler
 from template_creation.defaults import TransactionTemplateColumns, DefaultValues
 
@@ -14,9 +15,14 @@ class TransactionsTemplateCreator(BaseTemplateCreator, TransactionTemplateColumn
             'Summe': self.VOLUME,
         }
 
+    def skipped_content_dict(self):
+        return {
+            'Anwalt': self.DISPLAY_NAME,
+            'Position': self.SENIORITY
+        }
 
     def extract_data_from_table(self):
-
+        res= []
         for table in self.tables_dfs:
 
             if all(header in table.iloc[0].values for header in self.header_mapping_dict().keys()):
@@ -29,10 +35,11 @@ class TransactionsTemplateCreator(BaseTemplateCreator, TransactionTemplateColumn
 
                 table.reset_index(drop=True, inplace=True)
 
-                self.template_content.append(table)
+                res.append(table)
+            else:
+                self.skipped_content_df = table
 
-        if self.template_content:
-            self.create_template()
+        return res
 
 
 class TransactionsDataHandler(TemplateDataHandler, TransactionTemplateColumns, DefaultValues):

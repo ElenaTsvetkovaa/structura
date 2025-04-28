@@ -1,12 +1,11 @@
 import os
-
 from file_exporter import ExcelExporter
 from file_importer import PdfFileImporter
 from pdf_extraction import PdfExtractor
-from template_creation.line_template_creation import LineItemsDataHandler, LineItemsTemplateCreator
-from template_creation.transactions_template_creator import TransactionsTemplateCreator,TransactionsDataHandler
-
 from template_creation.defaults import TemplateLineItemColumns, TransactionTemplateColumns
+from template_creation.line_logic.line_template_creation import LineItemsDataHandler, LineItemsTemplateCreator
+from template_creation.transactions_logic.transactions_template_creator import TransactionsDataHandler, \
+    TransactionsTemplateCreator
 
 
 class PdfTableExtractor:
@@ -33,12 +32,15 @@ class PdfTableExtractor:
             file_name = os.path.basename(file_path)
 
             # Transactions
-            transactions_df = self.transactions_creator(tables, TransactionTemplateColumns, file_name, self.transactions_data_handler)
+            trans_creator = self.transactions_creator(tables, TransactionTemplateColumns, file_name, self.transactions_data_handler)
+            transactions_df = trans_creator.create_template()
 
             # Line Items
-            line_df = self.line_items_creator(tables, TemplateLineItemColumns, file_name, self.line_items_data_handler)
+            line_creator = self.line_items_creator(trans_creator.skipped_content_df, TemplateLineItemColumns, file_name, self.line_items_data_handler)
+            line_df = line_creator.create_template()
 
-            self.excel_exporter.export_to_excel(transactions_df, line_df, file_path, file_name)
+            exporter = self.excel_exporter(transactions_df, line_df, file_path, file_name)
+            exporter.export_to_excel()
 
         except Exception as e:
             raise e
