@@ -1,11 +1,10 @@
-from abc import ABC, abstractmethod
+
 from template_creation.base_template_creator import BaseTemplateCreator, TemplateDataHandler
 from template_creation.defaults import TemplateGlobalInformationColumns, DefaultValues
 
 
 class GlobalTemplateCreator(BaseTemplateCreator):
 
-    @abstractmethod
     def extract_data_from_table(self):
         ...
 

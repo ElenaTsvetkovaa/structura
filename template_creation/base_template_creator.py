@@ -15,8 +15,11 @@ class BaseTemplateCreator(ABC):
 
     def create_template(self):
         content = self.extract_data_from_table()
-        self.dataframe = pd.concat(content , ignore_index=True)
-        self.dataframe = self.dataframe.reindex(columns=self.template_columns.get_all_columns())
+        if content:
+            self.dataframe = pd.concat(content , ignore_index=True)
+            self.dataframe = self.dataframe.reindex(columns=self.template_columns.get_all_columns())
+        else:
+            self.dataframe = pd.DataFrame([{col: pd.NA for col in self.template_columns.get_all_columns()}])
 
         empty_columns = [c for c in self.dataframe.columns if self.dataframe[c].isna().all()]
         if empty_columns:

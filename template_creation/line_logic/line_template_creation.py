@@ -9,7 +9,6 @@ class LineItemsTemplateCreator(BaseTemplateCreator, TemplateLineItemColumns):
             'Dauer': self.QUANTITY,
             'Stundensatz': self.UNIT_PRICE,
             'Summe': self.LINE_PRICE,
-            'Anwalt': 'Honorar - ' + self.DESCRIPTION,
         }
 
     def extract_data_from_table(self):
@@ -35,6 +34,8 @@ class LineItemsDataHandler(TemplateDataHandler, TemplateLineItemColumns, Default
         return {
             self.COST_TYPE: self.default_cost_type,
             self.IS_HOURS: self.default_is_hours,
+            self.DESCRIPTION: self.default_line_description,
+            self.VAT_RATE: self.default_vat_rate
         }
 
 

@@ -92,7 +92,7 @@ class DefaultValues:
 
     @property
     def default_line_description(self):
-        return 'Honorar'
+        return 'Honorar - '
 
     @property
     def default_pricing_type(self):
@@ -102,3 +102,6 @@ class DefaultValues:
     def default_invoice_type(self):
         return 'Debit'
 
+    @property
+    def default_vat_rate(self):
+        return 19

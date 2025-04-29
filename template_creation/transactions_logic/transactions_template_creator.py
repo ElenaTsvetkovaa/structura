@@ -31,13 +31,13 @@ class TransactionsTemplateCreator(BaseTemplateCreator, TransactionTemplateColumn
 
                 table.rename(columns=self.header_mapping_dict(), inplace=True)
 
-                table = table[table[self.DATE] != 'Gesamt']
+                table = table[~table[self.DATE].isin(['Total', 'Gesamtsumme', 'Gesamt'])]
 
                 table.reset_index(drop=True, inplace=True)
 
                 res.append(table)
             else:
-                self.skipped_content_df = table.rename(columns=self.skipped_content_df(), inplace=True)
+                self.skipped_content_df = table.rename(columns=self.skipped_content_dict())
 
         return res
 
