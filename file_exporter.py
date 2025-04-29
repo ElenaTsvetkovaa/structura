@@ -12,7 +12,7 @@ class ExcelExporter:
     def create_local_folder(self):
 
         original_folder_path = os.path.dirname(self.file_path)
-        output_folder = os.path.join(original_folder_path, "templates")
+        output_folder = os.path.join(original_folder_path, f"{self.file_name}_templates")
         os.makedirs(output_folder, exist_ok=True)
 
         return output_folder

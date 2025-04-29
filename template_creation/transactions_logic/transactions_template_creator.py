@@ -37,7 +37,7 @@ class TransactionsTemplateCreator(BaseTemplateCreator, TransactionTemplateColumn
 
                 res.append(table)
             else:
-                self.skipped_content_df = table
+                self.skipped_content_df = table.rename(columns=self.skipped_content_df(), inplace=True)
 
         return res
 

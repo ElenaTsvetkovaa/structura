@@ -9,6 +9,7 @@ class LineItemsTemplateCreator(BaseTemplateCreator, TemplateLineItemColumns):
             'Dauer': self.QUANTITY,
             'Stundensatz': self.UNIT_PRICE,
             'Summe': self.LINE_PRICE,
+            'Anwalt': 'Honorar - ' + self.DESCRIPTION,
         }
 
     def extract_data_from_table(self):
@@ -34,23 +35,7 @@ class LineItemsDataHandler(TemplateDataHandler, TemplateLineItemColumns, Default
         return {
             self.COST_TYPE: self.default_cost_type,
             self.IS_HOURS: self.default_is_hours,
-            self.DESCRIPTION: self.default_line_description
         }
-
-    def populate_df_with_default_values(self, empty_columns, df, skipped_lines_df):
-
-        try:
-            for c in empty_columns:
-                if c == self.DESCRIPTION and skipped_lines_df is not None:
-                    if 'Anwalt' in skipped_lines_df.columns:
-                        people = skipped_lines_df['Anwalt'].astype(str).reset_index(drop=True)
-                        df[c] = self.default_line_description + " - " + people
-                    else:
-                        df[c] = self.default_line_description
-                elif c in mapper.keys():
-                    df[c] = mapper[c]
-        except (KeyError, TypeError) as e:
-            print(str(e))
 
 
 
