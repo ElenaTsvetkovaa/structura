@@ -2,7 +2,7 @@ import os
 from enum import global_str
 
 from file_exporter import ExcelExporter
-from file_importer import PdfFileImporter
+from file_importer import PdfWindowImporter
 from pdf_extraction import PdfExtractor
 from template_creation.defaults import TemplateLineItemColumns, TransactionTemplateColumns, \
     TemplateGlobalInformationColumns
@@ -14,7 +14,7 @@ from template_creation.transactions_logic.transactions_template_creator import T
 
 class PdfTableExtractor:
 
-    def __init__(self, extractor: PdfExtractor, importer: PdfFileImporter, excel_exporter, transactions_data_handler,
+    def __init__(self, extractor: PdfExtractor, importer: PdfWindowImporter, excel_exporter, transactions_data_handler,
                  transactions_creator, line_items_data_handler, line_items_creator, global_data_handler, global_creator):
 
         self.extractor = extractor
@@ -60,7 +60,7 @@ class PdfTableExtractor:
 
 if __name__ == "__main__":
     extractor = PdfExtractor()
-    importer = PdfFileImporter()
+    importer = PdfWindowImporter()
     transactions_data_handler = TransactionsDataHandler()
     line_items_data_handler = LineItemsDataHandler()
     global_data_handler = GlobalDataHandler()

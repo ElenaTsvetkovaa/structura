@@ -104,4 +104,4 @@ class DefaultValues:
 
     @property
     def default_vat_rate(self):
-        return 19
+        return 0.19
