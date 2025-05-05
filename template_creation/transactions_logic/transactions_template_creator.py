@@ -5,15 +5,19 @@ from template_creation.defaults import TransactionTemplateColumns, DefaultValues
 
 class TransactionsTemplateCreator(BaseTemplateCreator, TransactionTemplateColumns):
 
+    @property
+    def template_type(self):
+        return 'transactions'
+
     def header_mapping_dict(self):
-        return {
-            'Datum': self.DATE,
-            'Bearbeiter': self.DISPLAY_NAME,
-            'Tätigkeitsbeschreibung': self.DESCRIPTION,
-            'Dauer': self.QUANTITY,
-            'Stunden-Satz': self.HOURLY_RATE,
-            'Summe': self.VOLUME,
-        }
+            return {
+                'Datum': self.DATE,
+                'Bearbeiter': self.DISPLAY_NAME,
+                'Tätigkeitsbeschreibung': self.DESCRIPTION,
+                'Dauer': self.QUANTITY,
+                'Stunden-Satz': self.HOURLY_RATE,
+                'Summe': self.VOLUME,
+            }
 
     def skipped_content_dict(self):
         return {
