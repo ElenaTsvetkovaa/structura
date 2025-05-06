@@ -13,11 +13,6 @@ class BaseTemplateCreator(ABC):
         self.skipped_content_df: pd.DataFrame | None = None
         self.dataframe: pd.DataFrame | None = None
 
-    @abstractmethod
-    @property
-    def template_type(self):
-        pass
-
     def create_template(self):
         content = self.extract_data_from_table()
         if content:

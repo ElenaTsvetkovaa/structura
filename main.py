@@ -1,12 +1,10 @@
 import os
-from enum import global_str
-
 from file_exporter import ExcelExporter
 from file_importer import PdfWindowImporter
 from pdf_extraction import PdfExtractor
 from template_creation.defaults import TemplateLineItemColumns, TransactionTemplateColumns, \
     TemplateGlobalInformationColumns
-from template_creation.global_ltemplate_creation import GlobalDataHandler, GlobalTemplateCreator
+from template_creation.global_logic.global_template_creation import GlobalDataHandler, GlobalTemplateCreator
 from template_creation.line_logic.line_template_creation import LineItemsDataHandler, LineItemsTemplateCreator
 from template_creation.transactions_logic.transactions_template_creator import TransactionsDataHandler, \
     TransactionsTemplateCreator

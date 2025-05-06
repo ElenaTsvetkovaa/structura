@@ -5,10 +5,6 @@ from template_creation.defaults import TransactionTemplateColumns, DefaultValues
 
 class TransactionsTemplateCreator(BaseTemplateCreator, TransactionTemplateColumns):
 
-    @property
-    def template_type(self):
-        return 'transactions'
-
     def header_mapping_dict(self):
             return {
                 'Datum': self.DATE,
