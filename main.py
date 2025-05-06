@@ -51,7 +51,7 @@ class PdfTableExtractor:
             global_creator = self.global_creator(tables, TemplateGlobalInformationColumns, file_name, self.global_data_handler)
             global_df = global_creator.create_template()
 
-            exporter = self.excel_exporter(transactions_df, line_df, global_df, file_path, file_name)
+            exporter = self.excel_exporter(file_path, file_name, transactions_df, line_df, global_df, )
             exporter.export_to_excel()
 
         except Exception as e:
