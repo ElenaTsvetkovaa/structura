@@ -31,9 +31,8 @@ class TransactionsTemplateCreator(BaseTemplateCreator, TransactionTemplateColumn
         header_keys = set(header_map.keys())
 
         for table in self.tables_dfs:
-            for idx, row in table.iterrows():
-                row_values = set(row.values)
-                if header_keys.issubset(row_values):
+            for idx, row in enumerate(table.itertuples(index=False, name=None)):
+                if header_keys.issubset(set(row)):
                     table.columns = row
                     table = table.iloc[idx+1:]
                     header_found = True
