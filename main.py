@@ -6,7 +6,7 @@ from template_creation.defaults import TemplateLineItemColumns, TransactionTempl
     TemplateGlobalInformationColumns
 from template_creation.global_logic.global_template_creation import GlobalDataHandler, GlobalTemplateCreator
 from template_creation.line_logic.line_template_creation import LineItemsDataHandler, LineItemsTemplateCreator
-from template_creation.transactions_logic.transactions_template_creator import TransactionsDataHandler, \
+from template_creation.transactions_logic.transactions_transformer import TransactionsDataHandler, \
     TransactionsTemplateCreator
 
 
