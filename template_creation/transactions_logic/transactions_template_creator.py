@@ -8,33 +8,40 @@ class TransactionsTemplateCreator(BaseTemplateCreator, TransactionTemplateColumn
     def header_mapping_dict(self):
             return {
                 'Datum': self.DATE,
-                'Bearbeiter': self.DISPLAY_NAME,
-                'Tätigkeitsbeschreibung': self.DESCRIPTION,
-                'Dauer': self.QUANTITY,
-                'Stunden-Satz': self.HOURLY_RATE,
-                'Summe': self.VOLUME,
+                'RA': self.DISPLAY_NAME,
+                'Beschreibung': self.DESCRIPTION,
+                'Std.': self.QUANTITY,
+                'Std. Satz': self.HOURLY_RATE,
+                'Betrag': self.VOLUME,
             }
 
     def skipped_content_dict(self):
         return {
-            'Anwalt': self.DISPLAY_NAME,
-            'Position': self.SENIORITY
         }
 
     def extract_data_from_table(self):
+        """
+        Iterate through the extracted tables dataframes and if the table has the same
+        columns names as those we have in the mapping dict,
+        we found the correct table for this template and we extract the data
+        """
         res= []
+        header_found = False
+        header_map = self.header_mapping_dict()
+        header_keys = set(header_map.keys())
+
         for table in self.tables_dfs:
+            for idx, row in table.iterrows():
+                row_values = set(row.values)
+                if header_keys.issubset(row_values):
+                    table.columns = row
+                    table = table.iloc[idx+1:]
+                    header_found = True
+                    break
 
-            if all(header in table.iloc[0].values for header in self.header_mapping_dict().keys()):
-                table.columns = table.iloc[0]
-                table = table.drop(0)
-
+            if header_found:
                 table.rename(columns=self.header_mapping_dict(), inplace=True)
-
-                table = table[~table[self.DATE].isin(['Total', 'Gesamtsumme', 'Gesamt'])]
-
                 table.reset_index(drop=True, inplace=True)
-
                 res.append(table)
             else:
                 self.skipped_content_df = table.rename(columns=self.skipped_content_dict())

@@ -17,6 +17,7 @@ class BaseTemplateCreator(ABC):
         content = self.extract_data_from_table()
         if content:
             self.dataframe = pd.concat(content , ignore_index=True)
+            self.dataframe = self.dataframe.loc[:, ~self.dataframe.columns.duplicated()]
             self.dataframe = self.dataframe.reindex(columns=self.template_columns.get_all_columns())
         else:
             self.dataframe = pd.DataFrame([{col: pd.NA for col in self.template_columns.get_all_columns()}])

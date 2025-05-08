@@ -6,18 +6,16 @@ class LineItemsTemplateCreator(BaseTemplateCreator, TemplateLineItemColumns):
 
     def header_mapping_dict(self):
         return {
-            'Dauer': self.QUANTITY,
-            'Stundensatz': self.UNIT_PRICE,
-            'Summe': self.LINE_PRICE,
         }
 
     def extract_data_from_table(self):
 
+        if self.tables_dfs is None:
+            return
         table = self.tables_dfs.copy()
 
         table.columns = table.iloc[0]
         table = table.drop(table.index[0])
-        table = table[table['Anwalt'] != 'Gesamtsumme']
 
         table.rename(columns=self.header_mapping_dict(), inplace=True)
         # table.drop(columns=list(self.skipped_content_dict().keys()), inplace=True, errors='ignore')

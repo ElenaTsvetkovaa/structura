@@ -11,7 +11,7 @@ class PdfExtractor:
             tables = camelot.read_pdf(
                 pdf_path,
                 pages='all',
-                flavor='lattice',
+                flavor='network',
                 strip_text='\n',
                 split_text=True
             )
