@@ -1,71 +1,24 @@
-import os
-from file_exporter import ExcelExporter
-from file_importer import PdfWindowImporter
-from pdf_extraction import PdfExtractor
-from template_creation.defaults import TemplateLineItemColumns, TransactionTemplateColumns, \
-    TemplateGlobalInformationColumns
-from template_creation.global_logic.global_template_creation import GlobalDataHandler, GlobalTemplateCreator
-from template_creation.line_logic.line_template_creation import LineItemsDataHandler, LineItemsTemplateCreator
-from template_creation.transactions_logic.transactions_transformer import TransactionsDataHandler, \
-    TransactionsTemplateCreator
+from file_manager import FileManager
+from input.file_importer import PdfWindowImporter
+from output.file_exporter import ExcelExporter
 
 
-class PdfTableExtractor:
+class InvoiceDataCreator:
 
-    def __init__(self, extractor: PdfExtractor, importer: PdfWindowImporter, excel_exporter, transactions_data_handler,
-                 transactions_creator, line_items_data_handler, line_items_creator, global_data_handler, global_creator):
+    @staticmethod
+    def run():
+        pdf_importer = PdfWindowImporter()
+        file_path = pdf_importer.import_file()
 
-        self.extractor = extractor
-        self.importer = importer
-        self.excel_exporter = excel_exporter
+        file_manager = FileManager(file_path)
+        file_manager.create_import_data()
 
-        # Transactions classes
-        self.transactions_data_handler = transactions_data_handler
-        self.transactions_creator = transactions_creator
-
-        # Line Item classes
-        self.line_items_data_handler = line_items_data_handler
-        self.line_items_creator = line_items_creator
-
-        # Global
-        self.global_data_handler = global_data_handler
-        self.global_creator = global_creator
-
-    def run(self):
-        try:
-            file_path = self.importer.import_files()
-            tables = self.extractor.extract_tables_from_pdf(file_path)
-            file_name = os.path.basename(file_path)
-
-            # Transactions
-            trans_creator = self.transactions_creator(tables, TransactionTemplateColumns, file_name, self.transactions_data_handler)
-            transactions_df = trans_creator.create_template()
-
-            # Line Items
-            line_creator = self.line_items_creator(trans_creator.skipped_content_df, TemplateLineItemColumns, file_name, self.line_items_data_handler)
-            line_df = line_creator.create_template()
-
-            # Global
-            global_creator = self.global_creator(tables, TemplateGlobalInformationColumns, file_name, self.global_data_handler)
-            global_df = global_creator.create_template()
-
-            exporter = self.excel_exporter(file_path, file_name, transactions_df, line_df, global_df, )
-            exporter.export_to_excel()
-
-        except Exception as e:
-            raise e
-
+        exporter = ExcelExporter()
+        exporter.export_to_excel()
 
 if __name__ == "__main__":
-    extractor = PdfExtractor()
-    importer = PdfWindowImporter()
-    transactions_data_handler = TransactionsDataHandler()
-    line_items_data_handler = LineItemsDataHandler()
-    global_data_handler = GlobalDataHandler()
+    InvoiceDataCreator().run()
 
-    app = PdfTableExtractor(extractor, importer, ExcelExporter, transactions_data_handler, TransactionsTemplateCreator,
-                            line_items_data_handler, LineItemsTemplateCreator, global_data_handler, GlobalTemplateCreator)
-    app.run()
 
 
 

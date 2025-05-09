@@ -3,7 +3,7 @@ import pandas as pd
 from typing import List
 
 
-class PdfExtractor:
+class PdfReader:
 
     @staticmethod
     def extract_tables_from_pdf(pdf_path: str) -> List[pd.DataFrame]:

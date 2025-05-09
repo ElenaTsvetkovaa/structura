@@ -80,7 +80,10 @@ class PdfWindowImporter:
         self.file_list.delete(0, tk.END)
         self.file_list.insert(tk.END, self.file_path)
 
-    def import_files(self):
+    def import_file(self):
         self.root.mainloop()
         return self.file_path
 
+    @property
+    def file_name(self):
+        return os.path.basename(self.file_path)
