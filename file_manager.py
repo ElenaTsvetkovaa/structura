@@ -1,37 +1,23 @@
 from extraction.pdf_reader import PdfReader
-from template_creation.base_template_creator import BaseTemplateCreator
+from template_creation.template_creator import TemplateCreator
 
 
 class FileManager:
 
     def __init__(self, file_path):
         self.file_path = file_path
-        self.pdf_data_extractor = PdfReader()
+        self.pdf_data = None
+        self.xml_data = None
 
-        self.template_creator = BaseTemplateCreator()
-
+        self.template_creator = TemplateCreator(self.pdf_data, self.xml_data)
 
     def create_import_data(self):
+        self.pdf_data = PdfReader().extract_tables_from_pdf(self.file_path)
+        self.xml_data = ...
+
+        templates = self.template_creator.create_templates()
+
+        return templates
 
 
-        templates = self.create_templates()
 
-
-
-
-    def create_templates(self):
-        transactions_template = self.template_creator.__create_transactions_template()
-        line_items_template = self.__create_line_items_template()
-        global_template = self.__create_global_template()
-
-        return transactions_template, line_items_template, global_template
-
-
-    def __create_transactions_template(self):
-        ...
-
-    def __create_line_items_template(self):
-        ...
-
-    def __create_global_template(self):
-        ...
