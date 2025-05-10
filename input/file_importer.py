@@ -98,7 +98,7 @@ class FileImporter:
 
     def import_file(self):
         self.root.mainloop()
-        return {"pdf": self.pdf_path, "xml": self.xml_path}
+        return self.pdf_path, self.xml_path
 
     @property
     def file_name(self):

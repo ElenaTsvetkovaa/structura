@@ -1,0 +1,21 @@
+<Library>
+    <Book>
+        <Title>To Kill a Mockingbird</Title>
+        <Author>Harper Lee</Author>
+        <Year>1960</Year>
+    </Book>
+    <Librarians>
+        <Person1>
+            <Name>Sarah Thompson</Name>
+            <EmployeeID>10234</EmployeeID>
+        </Person1>
+        <Person2>
+            <Name>Elena Tsvetkova</Name>
+            <EmployeeID>20502</EmployeeID>
+        </Person2>
+    </Librarians>
+    <Location>
+        <City>New York</City>
+        <Section>Fiction</Section>
+    </Location>
+</Library>

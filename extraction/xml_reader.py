@@ -1,7 +1,6 @@
 import xml.etree.ElementTree as ET
 import pandas as pd
 
-
 class XMLReader:
 
     def __init__(self, xml_path):
@@ -12,6 +11,20 @@ class XMLReader:
         self.ns = {}
 
         self.xml_data = self.extract_xml_data()
+
+
+    def __extract_namespaces(self):
+        for event, element in self.root.iterparse(events=['start-ns']):
+            prefix, uri = element
+            self.ns[prefix] = uri
+
+    def _tag_name(self, tag):
+        if ':' in tag:
+            prefix, local_el = tag.split(':')
+            uri = self.ns[prefix]
+            return f"{{{uri}}}{local_el}"
+        else:
+            return tag
 
     def extract_xml_data(self):
         rows = []
@@ -33,9 +46,12 @@ class XMLReader:
         for child in element:
             if len(child):
                 values_dict = self.recurse(child)
-                nested_data.append(values_dict)
+                if isinstance(values_dict, list):
+                    nested_data.extend(values_dict)  # flatten if already a list
+                else:
+                    nested_data.append(values_dict)
             else:
-                tag = child.tag
+                tag = self.cleaned_tag(child.tag)
                 text = (child.text or '').strip()
                 if text:
                     data[tag] = text
@@ -45,15 +61,5 @@ class XMLReader:
 
         return data
 
-
-
-reader = XMLReader('C:\\Users\oWorkers\PycharmProjects\PdfAutomation\\xml.xml')
-
-print(reader.extract_xml_data())
-a=1
-
-
-
-
-
-
+    def cleaned_tag(self, tag):
+        return tag.split('}')[-1]

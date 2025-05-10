@@ -5,11 +5,13 @@ from typing import List
 
 class PdfReader:
 
-    @staticmethod
-    def extract_tables_from_pdf(pdf_path: str) -> List[pd.DataFrame]:
+    def __init__(self, pdf_path):
+        self.pdf_path = pdf_path
+
+    def extract_tables_from_pdf(self) -> List[pd.DataFrame]:
         try:
             tables = camelot.read_pdf(
-                pdf_path,
+                self.pdf_path,
                 pages='all',
                 flavor='network',
                 strip_text='\n',
