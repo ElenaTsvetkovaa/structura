@@ -39,7 +39,19 @@ class TransactionsExtractor(TransactionsDataHandler, TransactionTemplateColumns)
         return self.dataframe, self.skipped_content_df
 
 
+    def __create_template(self, content):
+        if content:
+            self.dataframe = pd.concat(content , ignore_index=True)
+            self.dataframe = self.dataframe.loc[:, ~self.dataframe.columns.duplicated()]
+            self.dataframe = self.dataframe.reindex(columns=self.template_columns.get_all_columns())
+        else:
+            self.dataframe = pd.DataFrame([{col: pd.NA for col in self.template_columns.get_all_columns()}])
 
+        empty_columns = [c for c in self.dataframe.columns if self.dataframe[c].isna().all()]
+        if empty_columns:
+            self.template_data_handler.populate_df_with_default_values(empty_columns, self.dataframe, self.skipped_content_df)
+
+        return self.dataframe
 
 
 
