@@ -5,8 +5,8 @@ class InvoiceDataCreator:
 
     @staticmethod
     def run():
-        pdf_importer = FileImporter()
-        pdf_path, xml_path = pdf_importer.import_file()
+        file_importer = FileImporter()
+        pdf_path, xml_path = file_importer.import_file()
 
         file_manager = FileManager(pdf_path, xml_path)
         file_manager.create_import_data()
