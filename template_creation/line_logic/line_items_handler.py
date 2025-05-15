@@ -1,9 +1,5 @@
-from template_creation.base_template_creator import BaseTemplateCreator, TemplateDataHandler
+from template_creation.template_handler import TemplateDataHandler
 from template_creation.defaults import TemplateLineItemColumns, DefaultValues
-
-
-class LineItemsTemplateCreator(BaseTemplateCreator):
-    pass
 
 
 class LineItemsDataHandler(TemplateDataHandler, TemplateLineItemColumns, DefaultValues):
@@ -16,5 +12,6 @@ class LineItemsDataHandler(TemplateDataHandler, TemplateLineItemColumns, Default
             self.VAT_RATE: self.default_vat_rate
         }
 
-
+    def header_mapping_dict(self):
+        return {}
 

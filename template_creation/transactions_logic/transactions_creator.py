@@ -45,6 +45,7 @@ class TransactionsCreator(TransactionsDataHandler, TransactionTemplateColumns):
         if self.skipped_content_df is not None:
             self.merge_skipped_lines()
 
+        self.dataframe = self.dataframe.reindex(columns=self.get_all_columns())
         self.check_for_empty_columns(self.dataframe)
         return self.dataframe
 
