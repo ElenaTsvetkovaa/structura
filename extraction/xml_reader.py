@@ -8,88 +8,40 @@ class XMLReader:
 
         self.tree = ET.parse(self.xml_path)
         self.root = self.tree.getroot()
-        self.ns = {}
 
         self.xml_data = self.extract_xml_data()
 
-
-    def __extract_namespaces(self):
-        for event, element in self.root.iterparse(events=['start-ns']):
-            prefix, uri = element
-            self.ns[prefix] = uri
-
-    def _tag_name(self, tag):
-        if ':' in tag:
-            prefix, local_el = tag.split(':')
-            uri = self.ns[prefix]
-            return f"{{{uri}}}{local_el}"
-        else:
-            return tag
-
     def extract_xml_data(self):
-        rows = []
-
-        for child in self.root:
-            row_data = self.recurse(child)
-            if isinstance(row_data, list):
-                for rd in row_data:
-                    rows.append(rd)
-            else:
-                rows.append(row_data)
+        rows = self.parse_xml_to_dicts(self.root)
 
         return pd.DataFrame(rows)
-
 
     def parse_xml_to_dicts(self, root):
         results = []
 
         for child in root:
             entry = {}
-            child_tag = self.cleaned_tag(child.tag)
             for subchild in child:
                 if list(subchild):
                     nested = {}
                     for item in subchild:
-                        item_tag = self.cleaned_tag(item.tag)
-                        key = f"{child_tag}/{item_tag}"
-                        value = (item.text or '').strip()
+                        key, value = self.__build_entry(subchild, item)
                         nested[key] = value
                     results.append(nested)
                 else:
-                    subchild_tag = self.cleaned_tag(subchild.tag)
-                    key = f"{child_tag}/{subchild_tag}"
-                    value = (subchild.text or '').strip()
+                    key, value = self.__build_entry(child, subchild)
                     entry[key] = value
             if entry:
                 results.append(entry)
 
         return results
-    #
-    # def recurse(self, element, data={}):
-    #
-    #     # Traverse each child element
-    #     for child in element:
-    #         if len(child):  # If the child has nested elements
-    #             values_dict = self.recurse(child, data)
-    #
-    #             # Flatten and merge the nested data into the parent dictionary
-    #             for key, value in values_dict.items():
-    #                 # If the key already exists, append to a list of values
-    #                 data[key] = value
-    #         else:
-    #             tag = self.cleaned_tag(child.tag)
-    #             text = (child.text or '').strip()
-    #             if text:
-    #                 # Add the text under the tag name, ensure lists for multiple values
-    #                 if tag in data:
-    #                     if isinstance(data[tag], list):
-    #                         data[tag].append(text)
-    #                     else:
-    #                         data[tag] = [data[tag], text]
-    #                 else:
-    #                     data[tag] = text
-    #
-    #     return data
 
-    def cleaned_tag(self, tag):
-        return tag.split('}')[-1]
+    def __clean_tag(self, raw_tag):
+        return raw_tag.split('}')[-1]
+
+    def __build_entry(self, parent_tag, element):
+        parent_tag = self.__clean_tag(parent_tag)
+        tag = self.__clean_tag(element.tag)
+        key = f"{parent_tag}/{tag}"
+        value = (element.text or '').strip()
+        return key, value
