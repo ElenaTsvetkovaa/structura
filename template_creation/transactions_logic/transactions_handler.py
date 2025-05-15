@@ -14,13 +14,12 @@ class TransactionsDataHandler(TemplateDataHandler, TransactionTemplateColumns, D
     def header_mapping_dict(self):
         return {
             'Datum': self.DATE,
-            'RA': self.DISPLAY_NAME,
+            'Sachbearbeiter/in ': self.DISPLAY_NAME,
             'Beschreibung': self.DESCRIPTION,
-            'Std.': self.QUANTITY,
-            'Std. Satz': self.HOURLY_RATE,
-            'Betrag': self.VOLUME,
+            'abzur. Std.': self.QUANTITY,
         }
 
     def skipped_content_dict(self):
         return {
+            'Stundensatz': self.HOURLY_RATE,
         }

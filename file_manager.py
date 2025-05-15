@@ -11,7 +11,6 @@ class FileManager:
         self.pdf_data = None
         self.xml_data = None
 
-        self.template_creator = TemplateCreator(self.pdf_data, self.xml_data)
 
     def create_import_data(self):
         if self.pdf_path is not None:
@@ -20,7 +19,8 @@ class FileManager:
         if self.xml_path is not None:
             self.xml_data = XMLReader(self.xml_path).extract_xml_data()
 
-        templates = self.template_creator.create_templates()
+        template_creator = TemplateCreator(self.pdf_data, self.xml_data)
+        templates = template_creator.create_templates()
 
         return templates
 

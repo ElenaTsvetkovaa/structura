@@ -39,27 +39,57 @@ class XMLReader:
 
         return pd.DataFrame(rows)
 
-    def recurse(self, element):
-        data = {}
-        nested_data = []
 
-        for child in element:
-            if len(child):
-                values_dict = self.recurse(child)
-                if isinstance(values_dict, list):
-                    nested_data.extend(values_dict)  # flatten if already a list
+    def parse_xml_to_dicts(self, root):
+        results = []
+
+        for child in root:
+            entry = {}
+            child_tag = self.cleaned_tag(child.tag)
+            for subchild in child:
+                if list(subchild):
+                    nested = {}
+                    for item in subchild:
+                        item_tag = self.cleaned_tag(item.tag)
+                        key = f"{child_tag}/{item_tag}"
+                        value = (item.text or '').strip()
+                        nested[key] = value
+                    results.append(nested)
                 else:
-                    nested_data.append(values_dict)
-            else:
-                tag = self.cleaned_tag(child.tag)
-                text = (child.text or '').strip()
-                if text:
-                    data[tag] = text
+                    subchild_tag = self.cleaned_tag(subchild.tag)
+                    key = f"{child_tag}/{subchild_tag}"
+                    value = (subchild.text or '').strip()
+                    entry[key] = value
+            if entry:
+                results.append(entry)
 
-        if nested_data:
-            return nested_data
-
-        return data
+        return results
+    #
+    # def recurse(self, element, data={}):
+    #
+    #     # Traverse each child element
+    #     for child in element:
+    #         if len(child):  # If the child has nested elements
+    #             values_dict = self.recurse(child, data)
+    #
+    #             # Flatten and merge the nested data into the parent dictionary
+    #             for key, value in values_dict.items():
+    #                 # If the key already exists, append to a list of values
+    #                 data[key] = value
+    #         else:
+    #             tag = self.cleaned_tag(child.tag)
+    #             text = (child.text or '').strip()
+    #             if text:
+    #                 # Add the text under the tag name, ensure lists for multiple values
+    #                 if tag in data:
+    #                     if isinstance(data[tag], list):
+    #                         data[tag].append(text)
+    #                     else:
+    #                         data[tag] = [data[tag], text]
+    #                 else:
+    #                     data[tag] = text
+    #
+    #     return data
 
     def cleaned_tag(self, tag):
         return tag.split('}')[-1]

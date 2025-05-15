@@ -15,7 +15,13 @@
         </Person2>
     </Librarians>
     <Location>
-        <City>New York</City>
-        <Section>Fiction</Section>
+        <City1>
+            <Name>New York</Name>
+            <Section>Fiction</Section>
+        </City1>
+        <City2>
+            <Name>Berlin</Name>
+            <Section>Comedy</Section>
+        </City2>
     </Location>
 </Library>

@@ -14,37 +14,63 @@ class XMLReader:
         self.xml_data = self.extract_xml_data()
 
     def extract_xml_data(self):
-        rows = []
+        return self.parse_xml_to_dicts(self.root)
 
-        for child in self.root:
-            row_data = self.recurse(child)
-            if isinstance(row_data, list):
-                for rd in row_data:
-                    rows.append(rd)
-            else:
-                rows.append(row_data)
-
-        return pd.DataFrame(rows)
 
     def recurse(self, element):
-        data = {}
-        nested_data = []
+        base_data = {}
+        rows = []
 
         for child in element:
+            tag = child.tag
             if len(child):
-                values_dict = self.recurse(child)
-                nested_data.append(values_dict)
+                nested = self.recurse(child)
+                if isinstance(nested, list):
+                    for entry in nested:
+                        combined = base_data.copy()
+                        combined.update(entry)
+                        rows.append(combined)
+                else:
+                    base_data.update(nested)
             else:
-                tag = child.tag
                 text = (child.text or '').strip()
                 if text:
-                    data[tag] = text
+                    base_data[tag] = text
 
-        if nested_data:
-            return nested_data
+        if rows:
+            # Merge base_data into each row if not already present
+            final_rows = []
+            for row in rows:
+                merged = base_data.copy()
+                merged.update(row)
+                final_rows.append(merged)
+            return final_rows
+        else:
+            return [base_data]
 
-        return data
+    def parse_xml_to_dicts(self, root):
+        results = []
 
+        for child in root:
+            entry = {}
+            for subchild in child:
+                if list(subchild):
+                    nested = {}
+                    for item in subchild:
+                        key = f"{child.tag}/{item.tag}"
+                        value = item.text.strip()
+                        nested[key] = value
+                    results.append(nested)
+
+                else:
+                    # директен елемент без поддеца (напр. <Title>)
+                    key = f"{child.tag}/{subchild.tag}"
+                    value = subchild.text.strip()
+                    entry[key] = value
+            if entry:
+                results.append(entry)
+
+        return results
 
 
 reader = XMLReader('C:\\Users\oWorkers\PycharmProjects\PdfAutomation\\xml.xml')
