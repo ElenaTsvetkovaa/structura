@@ -2,7 +2,7 @@ import os
 
 class ExcelExporter:
 
-    def __init__(self, file_path, file_name, transactions_df, line_items_df, global_df,):
+    def __init__(self, file_path, file_name, transactions_df, line_items_df, global_df):
         self.file_path = file_path
         self.file_name = file_name
 

@@ -9,6 +9,10 @@ __pycache__
 *.so
 output.xlsx
 
+# Custom
+test.py
+xml.xml
+
 # Distribution / packaging
 .Python
 build/
