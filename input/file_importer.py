@@ -66,7 +66,7 @@ class FileImporter:
         self.assign_file(path, extension, file_type)
 
     def _handle_import(self):
-        if self.xml_path and self.pdf_path:
+        if self.xml_path or self.pdf_path:
             self.root.destroy()  # If the import is confirmed, the window closes
 
     def assign_file(self, path, extension, file_type):
@@ -87,14 +87,6 @@ class FileImporter:
     def _extract_path(self, event):
         raw_path = self.root.tk.splitlist(event.data)[0]
         return raw_path.strip("{}'\"")
-
-    # def _update_listbox(self):
-    #     """ Updates the Listbox to display the selected file. """
-    #     self.file_list.delete(0, tk.END)
-    #     if self.pdf_path:
-    #         self.file_list.insert(tk.END, f"PDF: {self.pdf_path}")
-    #     if self.xml_path:
-    #         self.file_list.insert(tk.END, f"XML: {self.xml_path}")
 
     def import_file(self):
         self.root.mainloop()

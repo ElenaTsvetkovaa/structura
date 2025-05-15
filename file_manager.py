@@ -14,8 +14,11 @@ class FileManager:
         self.template_creator = TemplateCreator(self.pdf_data, self.xml_data)
 
     def create_import_data(self):
-        self.pdf_data = PdfReader(self.pdf_path).extract_tables_from_pdf()
-        self.xml_data = XMLReader(self.xml_path).extract_xml_data()
+        if self.pdf_path is not None:
+            self.pdf_data = PdfReader(self.pdf_path).extract_tables_from_pdf()
+
+        if self.xml_path is not None:
+            self.xml_data = XMLReader(self.xml_path).extract_xml_data()
 
         templates = self.template_creator.create_templates()
 
