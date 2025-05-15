@@ -1,4 +1,4 @@
-from template_creation.base_template_creator import TemplateDataHandler
+from template_creation.template_handler import TemplateDataHandler
 from template_creation.defaults import TransactionTemplateColumns, DefaultValues
 
 
